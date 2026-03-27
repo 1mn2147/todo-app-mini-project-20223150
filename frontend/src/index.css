@@ -1,0 +1,87 @@
+:root {
+  --bg: #090310;
+  --surface: #16081f;
+  --surface-high: #24122e;
+  --surface-highest: #321d3f;
+  --border: #4a2b5e;
+  --border-ghost: rgba(184, 116, 255, 0.2);
+  --text: #cbbad9;
+  --text-h: #f4ecfc;
+  
+  --primary: #d095ff;
+  --primary-dim: #b87af0;
+  --on-primary: #340c5e;
+  
+  --secondary: #40cef3;
+  --secondary-dim: #2cbbe0;
+  --on-secondary: #0a3a47;
+  
+  --error: #ff5f8e;
+  --error-bg: rgba(255, 95, 142, 0.1);
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', monospace;
+  
+  --radius: 16px;
+  --radius-sm: 8px;
+  --spacing-base: 8px;
+
+  font: 16px/1.6 var(--font-sans);
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(208, 149, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(64, 206, 243, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 40px rgba(208, 149, 255, 0.3);
+  @media (max-width: 1024px) {
+    font-size: 2.2rem;
+  }
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 0;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+  color: var(--secondary);
+}
