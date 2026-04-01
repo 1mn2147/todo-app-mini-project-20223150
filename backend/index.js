@@ -390,6 +390,7 @@ app.get('/', (req, res) => {
     note: 'The frontend dev server runs separately (commonly http://localhost:5173). Do not expect the SPA to be served from this server.'
   });
 });
+
 async function startServer() {
   const env = validateEnv(process.env);
 
@@ -399,13 +400,14 @@ async function startServer() {
   app.listen(env.port, () => console.log(`서버 실행 중: http://localhost:${env.port}`));
 }
 
-startServer().catch((error) => {
-  console.error(error.message);
-  process.exit(1);
-});
+if (!process.env.VERCEL && require.main === module) {
+  startServer().catch((error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
+}
 
-module.exports = {
-  app,
-  Todo,
-  User,
-};
+module.exports = app;
+module.exports.app = app;
+module.exports.Todo = Todo;
+module.exports.User = User;
