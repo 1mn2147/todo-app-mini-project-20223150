@@ -13,7 +13,42 @@ const { badRequest, conflict, notFound, unauthorized } = require('./utils/errors
 const { validateEnv } = require('./utils/env');
 
 const app = express();
-app.use(cors());
+
+function parseCorsOrigins(value) {
+  if (typeof value !== 'string' || !value.trim()) {
+    return null;
+  }
+
+  return value
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function createCorsOptions() {
+  const allowedOrigins = parseCorsOrigins(process.env.CORS_ORIGIN);
+
+  if (!allowedOrigins) {
+    return null;
+  }
+
+  return {
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, false);
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+}
+
+const corsOptions = createCorsOptions();
+
+app.use(corsOptions ? cors(corsOptions) : cors());
 app.use(express.json());
 
 function sanitizeUser(user) {
