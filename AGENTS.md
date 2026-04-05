@@ -18,6 +18,7 @@ Guide for coding agents working in `/root/todo-app-mini-project-20223150`.
 - No `.cursor/rules/` directory exists.
 - No `.github/copilot-instructions.md` file exists.
 - Do not assume hidden Cursor or Copilot rules.
+- `backend/vercel.json` configures standalone Vercel deployment when the backend project root is `backend/`.
 
 ## Read these before editing
 - `userplan.md`
@@ -153,6 +154,7 @@ Guide for coding agents working in `/root/todo-app-mini-project-20223150`.
 - After frontend changes, run `npm --prefix frontend run lint`.
 - After frontend UI changes, run `npm --prefix frontend run build`.
 - After backend changes affecting startup, run `npm --prefix backend run start` or `npm --prefix backend run dev`.
+- After backend deployment changes, verify the exported Vercel handler still works locally and ensure required Vercel env vars are documented (`MONGODB_URI`, `JWT_SECRET`, `CORS_ORIGIN`).
 - If a command does not exist, say so clearly instead of implying it passed.
 - If you add tests or typechecking, update this file with the exact commands.
 

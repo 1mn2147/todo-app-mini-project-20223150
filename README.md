@@ -67,6 +67,22 @@ VITE_API_BASE_URL=http://your-api-url
 
 Important: an empty string is not treated as an external host — the build will fall back to same-origin requests when `VITE_API_BASE_URL` is unset or empty.
 
+For separate Vercel projects, set the frontend production env var in the Vercel dashboard instead:
+
+```env
+VITE_API_BASE_URL=https://todo-app-mini-project-20223150.vercel.app
+```
+
+For the backend Vercel project, set these production environment variables in the Vercel dashboard:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secure_jwt_secret
+CORS_ORIGIN=https://todo-app-mini-project-20223150-mnwe.vercel.app
+```
+
+The backend project is configured for standalone Vercel deployment from the `backend/` directory via `backend/vercel.json`.
+
 ### 3. Running Locally
 
 Start the backend and frontend in separate terminals.

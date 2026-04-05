@@ -13,6 +13,7 @@ const { badRequest, conflict, notFound, unauthorized } = require('./utils/errors
 const { validateEnv } = require('./utils/env');
 
 const app = express();
+let databaseConnectionPromise = null;
 
 function parseCorsOrigins(value) {
   if (typeof value !== 'string' || !value.trim()) {
@@ -426,10 +427,35 @@ app.get('/', (req, res) => {
   });
 });
 
+async function ensureDatabaseConnection() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (!databaseConnectionPromise) {
+    const env = validateEnv(process.env);
+
+    databaseConnectionPromise = mongoose
+      .connect(env.mongodbUri)
+      .then((mongooseInstance) => mongooseInstance.connection)
+      .catch((error) => {
+        databaseConnectionPromise = null;
+        throw error;
+      });
+  }
+
+  return databaseConnectionPromise;
+}
+
+async function handleRequest(req, res) {
+  await ensureDatabaseConnection();
+  return app(req, res);
+}
+
 async function startServer() {
   const env = validateEnv(process.env);
 
-  await mongoose.connect(env.mongodbUri);
+  await ensureDatabaseConnection();
   console.log('MongoDB 연결 성공');
 
   app.listen(env.port, () => console.log(`서버 실행 중: http://localhost:${env.port}`));
@@ -442,7 +468,9 @@ if (!process.env.VERCEL && require.main === module) {
   });
 }
 
-module.exports = app;
+module.exports = handleRequest;
 module.exports.app = app;
+module.exports.handleRequest = handleRequest;
+module.exports.ensureDatabaseConnection = ensureDatabaseConnection;
 module.exports.Todo = Todo;
 module.exports.User = User;
