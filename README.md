@@ -57,11 +57,15 @@ PORT=5000
 - `JWT_SECRET`: A secure string for signing tokens.
 - `PORT`: (Optional) Backend port, defaults to 5000.
 
-For the frontend, the API base URL defaults to `http://localhost:5000`. You can override this in `frontend/.env`:
+For the frontend, development uses a local backend at `http://localhost:5000` by default. In production the frontend is intended to talk to the backend on the same origin (requests to `/api/*`) so no API host is required when deploying the whole project to a single host (for example a Vercel single-project deployment).
+
+If you intentionally want the frontend to call an external API host in production, set a non-empty value in `frontend/.env`:
 
 ```env
 VITE_API_BASE_URL=http://your-api-url
 ```
+
+Important: an empty string is not treated as an external host — the build will fall back to same-origin requests when `VITE_API_BASE_URL` is unset or empty.
 
 ### 3. Running Locally
 

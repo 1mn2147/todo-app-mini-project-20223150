@@ -1,6 +1,13 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000' : import.meta.env.VITE_API_BASE_URL
+// In dev use the local backend; in production prefer same-origin unless a
+// non-empty VITE_API_BASE_URL is explicitly provided. An empty string should
+// NOT be treated as an external host (treat as unset).
+const API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:5000'
+  : (typeof import.meta.env.VITE_API_BASE_URL === 'string' && import.meta.env.VITE_API_BASE_URL.trim() !== ''
+    ? import.meta.env.VITE_API_BASE_URL
+    : undefined)
 
 export const AUTH_TOKEN_STORAGE_KEY = 'todo-app-auth-token'
 
