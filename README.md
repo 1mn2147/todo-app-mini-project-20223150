@@ -81,6 +81,8 @@ JWT_SECRET=your_secure_jwt_secret
 CORS_ORIGIN=https://todo-app-mini-project-20223150-mnwe.vercel.app
 ```
 
+When `CORS_ORIGIN` is set to the frontend's stable Vercel production URL, the backend also accepts matching Vercel preview URLs for that same project (for example branch/preview deploy domains under `*.vercel.app`).
+
 The backend project is configured for standalone Vercel deployment from the `backend/` directory via `backend/vercel.json`.
 
 ### 3. Running Locally

@@ -26,6 +26,45 @@ function parseCorsOrigins(value) {
     .filter(Boolean);
 }
 
+function parseOriginUrl(origin) {
+  try {
+    return new URL(origin);
+  } catch {
+    return null;
+  }
+}
+
+function isMatchingVercelPreviewOrigin(origin, allowedOrigin) {
+  const originUrl = parseOriginUrl(origin);
+  const allowedOriginUrl = parseOriginUrl(allowedOrigin);
+
+  if (!originUrl || !allowedOriginUrl) {
+    return false;
+  }
+
+  if (originUrl.origin === allowedOriginUrl.origin) {
+    return true;
+  }
+
+  const vercelHostSuffix = '.vercel.app';
+
+  if (
+    originUrl.protocol !== allowedOriginUrl.protocol ||
+    !originUrl.hostname.endsWith(vercelHostSuffix) ||
+    !allowedOriginUrl.hostname.endsWith(vercelHostSuffix)
+  ) {
+    return false;
+  }
+
+  const allowedSubdomain = allowedOriginUrl.hostname.slice(0, -vercelHostSuffix.length);
+
+  return originUrl.hostname.startsWith(`${allowedSubdomain}-`);
+}
+
+function isAllowedCorsOrigin(origin, allowedOrigins) {
+  return allowedOrigins.some((allowedOrigin) => isMatchingVercelPreviewOrigin(origin, allowedOrigin));
+}
+
 function createCorsOptions() {
   const allowedOrigins = parseCorsOrigins(process.env.CORS_ORIGIN);
 
@@ -35,7 +74,7 @@ function createCorsOptions() {
 
   return {
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || isAllowedCorsOrigin(origin, allowedOrigins)) {
         callback(null, true);
         return;
       }

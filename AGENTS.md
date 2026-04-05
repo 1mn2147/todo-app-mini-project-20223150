@@ -143,6 +143,7 @@ Guide for coding agents working in `/root/todo-app-mini-project-20223150`.
   - delete a todo.
 - `userplan.md` allows Axios or `fetch`.
 - `frontend/package.json` includes `axios`, but current frontend code does not use it yet.
+- Backend CORS is configured from `CORS_ORIGIN`; when that value is a Vercel production frontend URL, matching same-project Vercel preview URLs are also allowed.
 
 ## Naming conventions
 - Components and models: PascalCase.
