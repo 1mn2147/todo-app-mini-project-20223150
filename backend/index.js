@@ -132,20 +132,41 @@ function validateOptionalDueAt(value) {
   }
 
   if (typeof value !== 'string') {
-    throw badRequest('Due date must be a valid ISO datetime');
+    throw badRequest('Due date must be a valid date');
   }
 
   const trimmedValue = value.trim();
+  const dateOnlyPattern = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const dateOnlyMatch = trimmedValue.match(dateOnlyPattern);
+
+  if (dateOnlyMatch) {
+    const [, yearText, monthText, dayText] = dateOnlyMatch;
+    const year = Number(yearText);
+    const monthIndex = Number(monthText) - 1;
+    const day = Number(dayText);
+    const dueAt = new Date(Date.UTC(year, monthIndex, day, 12, 0, 0, 0));
+
+    if (
+      dueAt.getUTCFullYear() !== year ||
+      dueAt.getUTCMonth() !== monthIndex ||
+      dueAt.getUTCDate() !== day
+    ) {
+      throw badRequest('Due date must be a valid date');
+    }
+
+    return dueAt;
+  }
+
   const isoDateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/;
 
   if (!isoDateTimePattern.test(trimmedValue)) {
-    throw badRequest('Due date must be a valid ISO datetime');
+    throw badRequest('Due date must be a valid date');
   }
 
   const dueAt = new Date(trimmedValue);
 
   if (Number.isNaN(dueAt.getTime())) {
-    throw badRequest('Due date must be a valid ISO datetime');
+    throw badRequest('Due date must be a valid date');
   }
 
   return dueAt;

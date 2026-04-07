@@ -37,7 +37,7 @@ function getDueAtPayload(dueAtInput) {
     return null
   }
 
-  return new Date(dueAtInput).toISOString()
+  return dueAtInput
 }
 
 function formatDueAtLabel(dueAt) {
@@ -51,7 +51,7 @@ function formatDueAtLabel(dueAt) {
     return ''
   }
 
-  return parsedDueAt.toLocaleString()
+  return parsedDueAt.toLocaleDateString()
 }
 
 function getStartOfLocalDay(date = new Date()) {
@@ -613,7 +613,7 @@ function App() {
     event.preventDefault()
 
     if (!todoDueAt) {
-      setFeedback({ type: 'error', message: 'A due date and time is required.' })
+      setFeedback({ type: 'error', message: 'A due date is required.' })
       return
     }
 
@@ -926,11 +926,11 @@ function App() {
                   required
                 />
                 <input
-                  type="datetime-local"
+                  type="date"
                   value={todoDueAt}
                   onChange={(event) => setTodoDueAt(event.target.value)}
                   disabled={isBusy}
-                  aria-label="Due date and time"
+                  aria-label="Due date"
                   required
                 />
                 <button type="submit" className="primary-button" disabled={isBusy}>
